@@ -48,8 +48,6 @@ sub send() {
 	# data to send to a server
 	#print ">$data";
 	my $size = $socket->send($data);
-	# notify server that request has been sent
-	#shutdown($socket, 1);
 	# receive a response of up to 1024 characters from server
 	my $response = "";
 	$socket->recv($response, 1024);
@@ -60,12 +58,8 @@ sub send() {
 
 sub sendOnly() {
 	my ($data)=@_;
-	# data to send to a server
 	#print ">$data";
 	my $size = $socket->send($data);
-	# notify server that request has been sent
-	#shutdown($socket, 1);
-	# receive a response of up to 1024 characters from server
 	return 1;
 }
 
