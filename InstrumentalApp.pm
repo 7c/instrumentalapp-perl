@@ -11,7 +11,7 @@ my $socket;
 my $apikey;
 $| = 1;
 
-sub init() {
+sub connect() {
 	$| = 1;
 	$socket = new IO::Socket::INET (
 	    PeerHost => 'collector.instrumentalapp.com',
@@ -26,15 +26,18 @@ sub init() {
 sub auth() {
 	my ($token)=@_;
 	$apikey=$token;
-	InstrumentalApp::init() if (!defined($socket)) ;	
 }
 
 sub increment() {
 	my ($key,$by)=@_;
 	$by=1 if (!defined($by));
 	$now=time();
-	#increment test.metric 1 1502626112
-	return InstrumentalApp::sendOnly("increment $key $by $now\n");	
+	if (defined(InstrumentalApp::connect())) {
+		InstrumentalApp::sendOnly("increment $key $by $now\n");
+		InstrumentalApp::close();
+		return 1;
+	} 
+	return undef;
 }
 
 sub gauge() {
@@ -42,7 +45,12 @@ sub gauge() {
 	$v=1 if (!defined($v));
 	$now=time();
 	#increment test.metric 1 1502626112
-	return InstrumentalApp::sendOnly("gauge $key $v $now\n");	
+	if (defined(InstrumentalApp::connect())) {
+		InstrumentalApp::sendOnly("gauge $key $v $now\n");
+		InstrumentalApp::close();
+		return 1;
+	} 
+	return undef;
 }
 
 
