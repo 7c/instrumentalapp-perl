@@ -57,23 +57,23 @@ sub gauge() {
 sub send() {
 	my ($data)=@_;
 	# data to send to a server
-	print ">$data";
+	#print ">$data";
 	my $size = $socket->send($data);
 	#$socket->flush;
 	# receive a response of up to 1024 characters from server
 	my $response = "";
 	$socket->recv($response, 1024);
-	print "received response: $response\n";
+	#print "received response: $response\n";
 	if ($response=~/ok/mi) { return 1; }
 	return undef;
 }
 
 sub sendOnly() {
 	my ($data)=@_;
-	print ">$data";
+	#print ">$data";
 	my $size = $socket->send($data);
-	print "sent $size bytes\n";
-	$socket->flush;
+	#print "sent $size bytes\n";
+	#$socket->flush;
 	return 1;
 }
 
